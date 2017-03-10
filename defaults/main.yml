@@ -26,3 +26,24 @@ gitlab_runner_tags: []
 # Directory where builds and caches will be stored in context of selected executor
 # (Locally, Docker, SSH)
 gitlab_runner_persistent_dir: "/etc/gitlab-runner"
+
+# Default executor type = shell | docker | ssh
+# Not yet : (docker-ssh,parallels,virtualbox,docker+machine,docker-ssh+machine,kubernetes)
+gitlab_runner_executor: 'shell'
+
+
+### DOCKER DEFAULT ###
+gitlab_runner_docker_host: 'localhost'
+gitlab_runner_docker_cert_path: ''
+gitlab_runner_docker_tlsverify: false
+gitlab_runner_docker_image: 'debian:jessie-slim'
+gitlab_runner_docker_privileged: false
+gitlab_runner_docker_disable_cache: true
+gitlab_runner_docker_volumes: []
+gitlab_runner_docker_extra_hosts: []
+
+### SSH DEFAULT ###
+gitlab_runner_ssh_user: 'ubuntu'
+gitlab_runner_ssh_password: ''
+gitlab_runner_ssh_host: 'localhost'
+gitlab_runner_ssh_identity_file: '/home/{{ gitlab_runner_ssh_user }}/.ssh/id_rsa'

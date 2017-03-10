@@ -26,6 +26,7 @@ All variables can be found in [defaults/main.yml](https://github.com/Furdarius/a
     gitlab_runner_coordinator_url: 'https://gitlab.example.com/ci'
     gitlab_runner_tags: [ 'docker' ]
     gitlab_runner_coordinator_cert_path: "./certs/gitlab.example.com.crt"
+    gitlab_runner_executor: 'docker'
   vars_prompt:
    - name: "gitlab_runner_registration_token"
      prompt: "Registration token is"

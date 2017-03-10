@@ -4,14 +4,55 @@
   register: configured_runners
   changed_when: false
 
-- name: Register runner to GitLab
+- name: Register shell runner to GitLab
   command: gitlab-ci-multi-runner register >
     --non-interactive
     --url '{{ gitlab_runner_coordinator_url }}'
     --registration-token '{{ gitlab_runner_registration_token }}'
     --name '{{ gitlab_runner_name }}'
     --tag-list '{{ gitlab_runner_tags | join(",") }}'
-    --executor shell
+    --executor {{ gitlab_runner_executor }}
     --builds-dir '{{ gitlab_runner_persistent_dir }}/builds'
     --cache-dir '{{ gitlab_runner_persistent_dir }}/cache'
-  when: configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
+  when:
+    - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
+    - gitlab_runner_executor == "shell"
+
+- name: Register docker runner to GitLab
+  command: gitlab-ci-multi-runner register >
+    --non-interactive
+    --url '{{ gitlab_runner_coordinator_url }}'
+    --registration-token '{{ gitlab_runner_registration_token }}'
+    --name '{{ gitlab_runner_name }}'
+    --tag-list '{{ gitlab_runner_tags | join(",") }}'
+    --executor {{ gitlab_runner_executor }}
+    --builds-dir '{{ gitlab_runner_persistent_dir }}/builds'
+    --cache-dir '{{ gitlab_runner_persistent_dir }}/cache'
+    --docker-host '{{ gitlab_runner_docker_host }}'
+    --docker-cert-path '{{ gitlab_runner_docker_cert_path }}'
+    --docker-image '{{ gitlab_runner_docker_image }}'
+    --docker-privileged '{{ gitlab_runner_docker_privileged }}'
+    --docker-disable-cache '{{ gitlab_runner_docker_disable_cache }}'
+    --docker-volumes '{{ gitlab_runner_docker_volumes | join(",") }}'
+    --docker-extra-hosts '{{ gitlab_runner_docker_extra_hosts | join(",") }}'
+  when:
+    - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
+    - gitlab_runner_executor == "docker"
+
+- name: Register ssh runner to GitLab
+  command: gitlab-ci-multi-runner register >
+    --non-interactive
+    --name '{{ gitlab_runner_name }}'
+    --url '{{ gitlab_runner_coordinator_url }}'
+    --registration-token '{{ gitlab_runner_registration_token }}'
+    --tag-list '{{ gitlab_runner_tags | join(",") }}'
+    --executor {{ gitlab_runner_executor }}
+    --builds-dir '{{ gitlab_runner_persistent_dir }}/builds'
+    --cache-dir '{{ gitlab_runner_persistent_dir }}/cache'
+    --ssh-user '{{ gitlab_runner_ssh_user }}'
+    --ssh-password '{{ gitlab_runner_ssh_password }}'
+    --ssh-host '{{ gitlab_runner_ssh_host }}'
+    --ssh-identity-file '{{ gitlab_runner_ssh_identity_file }}'
+  when:
+    - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
+    - gitlab_runner_executor == 'ssh'
