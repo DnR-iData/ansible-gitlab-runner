@@ -38,7 +38,7 @@ gitlab_runner_docker_cert_path: ''
 gitlab_runner_docker_tlsverify: false
 gitlab_runner_docker_image: 'debian:jessie-slim'
 gitlab_runner_docker_privileged: false
-gitlab_runner_docker_disable_cache: true
+gitlab_runner_docker_disable_cache: false
 gitlab_runner_docker_volumes: []
 gitlab_runner_docker_extra_hosts: []
 

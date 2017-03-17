@@ -31,10 +31,10 @@
     --docker-host '{{ gitlab_runner_docker_host }}'
     --docker-cert-path '{{ gitlab_runner_docker_cert_path }}'
     --docker-image '{{ gitlab_runner_docker_image }}'
-    --docker-privileged '{{ gitlab_runner_docker_privileged }}'
-    --docker-disable-cache '{{ gitlab_runner_docker_disable_cache }}'
-    --docker-volumes '{{ gitlab_runner_docker_volumes | join(",") }}'
     --docker-extra-hosts '{{ gitlab_runner_docker_extra_hosts | join(",") }}'
+    --docker-volumes '{{ gitlab_runner_docker_volumes | join(",") }}'
+    --docker-privileged={{ gitlab_runner_docker_privileged }}
+    --docker-disable-cache={{ gitlab_runner_docker_disable_cache }}
   when:
     - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
     - gitlab_runner_executor == "docker"
