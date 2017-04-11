@@ -38,6 +38,7 @@
     owner: root
     group: root
     mode: 0644
+    backup: yes
 
 - name: Install Self-Signed cert on system
   include: custom-certs.yml

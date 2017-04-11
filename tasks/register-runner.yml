@@ -18,6 +18,14 @@
     - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
     - gitlab_runner_executor == "shell"
 
+- name: Check if Volumes not zero.
+  set_fact: gitlab_runner_docker_volumes='--docker-volumes={{ gitlab_runner_docker_volumes | join(",") }}'
+  register: config_dir
+  when:
+    - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
+    - gitlab_runner_executor == "docker"
+    - gitlab_runner_docker_volumes != ''
+
 - name: Register docker runner to GitLab
   command: gitlab-ci-multi-runner register >
     --non-interactive
@@ -32,9 +40,9 @@
     --docker-cert-path '{{ gitlab_runner_docker_cert_path }}'
     --docker-image '{{ gitlab_runner_docker_image }}'
     --docker-extra-hosts '{{ gitlab_runner_docker_extra_hosts | join(",") }}'
-    --docker-volumes '{{ gitlab_runner_docker_volumes | join(",") }}'
     --docker-privileged={{ gitlab_runner_docker_privileged }}
     --docker-disable-cache={{ gitlab_runner_docker_disable_cache }}
+    '{{ gitlab_runner_docker_volumes }}'
   when:
     - configured_runners.stdout.find("{{ gitlab_runner_name }}") == -1
     - gitlab_runner_executor == "docker"
